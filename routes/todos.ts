@@ -11,10 +11,31 @@ router.post('/todo',(req,res,next)=>{
         text:req.body.text
     }
     todos.push(newTodo);
+    res.status(200).json({todos});
 })
-router.delete(':id',(req,res,next)=>{
+router.delete('/:id',(req,res,next)=>{
     const {id} =req.params;
-   const filteredTodos:Todo[]=todos.filter((todo)=>todo.id!==id);
-   
+  let index:number=todos.findIndex(todo=>todo.id===id);
+  if(index!==-1){
+todos.splice(index,1);
+res.status(200).json({todos});
+  }else{
+    res.status(404).json({message:"not found "});
+  }
+  
+
+})
+router.put('/:id',(req,res,next)=>{
+    const {id} =req.params;
+    const {text}=req.body;
+  let index:number=todos.findIndex(todo=>todo.id===id);
+  if(index!==-1){
+todos[index].text=text;
+res.status(200).json({todos});
+  }else{
+    res.status(404).json({message:"not found "});
+  }
+  
+
 })
 export default router;
